@@ -7,11 +7,6 @@ var enemyNames = ['Roborto', 'Amy Android', 'Robo Trumble'];
 var enemyHealth = 50;
 var enemyAttack = 12;
 
-console.log(enemyNames);
-console.log(enemyNames.length);
-console.log(enemyNames[0]);
-console.log(enemyNames[3]);
-
 var fight = function(enemyName) {
   // Repeat and execute as long as the enemy-robot is alive
   while (playerHealth > 0 && enemyHealth > 0) {
@@ -91,6 +86,17 @@ var startGame = function() {
 
       // pass the pickedEnemyName variable's value into the fight function, where it will assume the value of the enemyName parameter
       fight(pickedEnemyName);
+
+      // if player is still alive and we're not at the last enemy in the array
+      if (playerHealth > 0 && i < enemyNames.length - 1) {
+        // ask if player wants to use the store before the next round
+        var storeConfirm = window.confirm("The fight is over, visit the store before the next round?");
+
+        // if yes, take them to the store() function
+        if (storeConfirm) {
+          shop();
+        }
+      }
     }
     // if player isn't alive, stop the game
     else {
@@ -125,22 +131,54 @@ var endGame = function() {
   }
 };
 
+var shop = function() {
+  // ask player what they'd like to do
+  var shopOptionPrompt = window.prompt(
+    "Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter one: 'REFILL', 'UPGRADE', or 'LEAVE' to make a choice."
+  );
+
+  // use switch case to carry out action
+  switch (shopOptionPrompt) {
+    case "REFILL": // new case
+    case "refill":
+      if (playerMoney >= 7) {
+        window.alert("Refilling player's health by 20 for 7 dollars.");
+
+        // increase health and decrease money
+        playerHealth = playerHealth + 20;
+        playerMoney = playerMoney - 7;
+    }
+    else {
+        window.alert("You don't have enough money!");
+    }
+      break;
+    case "UPGRADE": // new case
+    case "upgrade":
+      if (playerMoney >= 7) {
+        window.alert("Upgrading player's attack by 6 for 7 dollars");
+
+        // increase attack and decrease money
+        playerAttack = playerAttack + 6;
+        playerMoney = playerMoney - 7;
+    }
+    else {
+        window.alert("You don't have enought money!")
+    }
+      break;
+    case "LEAVE": // new case
+    case "leave":
+      window.alert("Leaving the store.");
+
+      // do nothing, so function will end
+      break;
+    default:
+      window.alert("You did not pick a valid option. Try again.");
+
+      // call shop() again to force player to pick a valid option
+      shop();
+      break;
+  }
+};
+
 // start the game when the page loads
 startGame();
-
-// Wrap the game logic in a startGame() function
-
-// When the player is defeated or there are no more enemies, call an endGame() function that:
-  // Alerts the player's total ststs
-  // Asks the plater if they want to play again
-  // If yes, call startGame() to restart the game
-
-// After the player skips or defeats an enemy (and there are still more robots to fight):
-  // Ask the player if they want to "shop"
-  // If no, continue as normal
-  // If yes, call the shop() function
-  // In the shop() function, ask player if they want to "refill" health, "upgrade" attack, or "leave" the shop
-  // If refill, subtract money points from player and increase health
-  // If upgrade, subtract money points from player and increase attack power
-  // If leave, alert goodbye and exit the function
-  // If any other invalid option, call shop() again
